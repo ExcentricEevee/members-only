@@ -1,0 +1,6 @@
+<%= form_with model: @post do |form| %>
+    <%= form.text_field :title, value: "Put your title here" %><br>
+    <%= form.text_area :body, value: "What's on your mind?" %><br><br>
+
+    <%= form.submit %>
+<% end %>

@@ -1,21 +1,29 @@
 class PostsController < ApplicationController
-    before_action :require_login, only: [:new, :create]
-    #before_action :authenticate_user!
+    before_action :authenticate_user!, only: [:new, :create]
 
     def index
-        @posts
+        @posts = Post.all
     end
 
     def new
+        @post = current_user.posts.build
+    end
 
+    def create
+        #accept only safe, intended data, and builds on the signed in user
+        @post = current_user.posts.build(post_params)
+
+        if @post.save
+            redirect_to root_path
+        else
+            render :new
+        end
     end
 
     private
 
-    def require_login
-        unless logged_in?
-            flash[:error] = "You must be logged in to do that."
-            redirect_to new_user_session
-        end
+    #this makes it so any data in the :post hash doesn't contain any malicious data, only the permitted fields
+    def post_params
+        params.require(:post).permit(:title, :body)
     end
 end

@@ -1,3 +1,22 @@
 <h1>This is for MEMBERS-ONLY</h1>
+<p>This project website is to practice using authentication/authorization.<br>
+Everyone may see all the posts, but only logged in users may see the authors of them.</p>
+<hr>
 
-<p>Anyway welcome to posts#index</p>
+<!-- Display each post on main page -->
+<% @posts.each do |post| %>
+    <h3><%= post.title %></h3>
+    <p><%= post.body %></p>
+    <% if user_signed_in? %>
+        <p>By: <%= post.user.username %></p>
+    <% end %>
+    <hr>
+<% end %>
+
+<% if user_signed_in? %>
+    <%= link_to "New Post", new_post_path %><br>
+    <%= link_to "Sign Out", destroy_user_session_path, method: :delete, data: { confirm: "Sign out?" } %>
+<% else %>
+    <%= link_to "Sign Up", new_user_registration_path %><br>
+    <%= link_to "Sign In", new_user_session_path %>
+<% end %>
